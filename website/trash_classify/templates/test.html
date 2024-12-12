@@ -1,0 +1,33 @@
+{% load static %}
+{% load pwa %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Trash Classify</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="{% static 'css/test/style.css' %}">
+    <script src="{% static 'js/theme.js' %}"></script>
+    {% progressive_web_app_meta %}
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">Trash Classify</h1>
+        <div style="margin: 0px 0px 5px 5px;">Upload Image</div>
+        
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            {% csrf_token %}
+            <!-- {{ form.as_p }} -->
+            <input type="file" name="image" accept="image/*" required id="fileInput">
+            <button type="submit">Upload</button>
+        </form>
+        
+        {% if result %}
+            <div id="result">
+                <h2>Result: {{ result }}</h2>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

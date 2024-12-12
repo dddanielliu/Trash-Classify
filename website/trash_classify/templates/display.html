@@ -1,0 +1,359 @@
+{% load static %}
+{% load pwa %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Latest Image</title>
+    
+    {% progressive_web_app_meta %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #000000;
+            color: rgb(238, 238, 238);
+            transition: cursor 0.3s;
+        }
+
+        .hide-cursor {
+            cursor: none;
+        }
+        .image-container {
+            max-height: 100vh; /* Fullscreen height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px; /* Added padding for better spacing */
+            box-sizing: border-box; /* Include padding in width/height calculations */
+            margin: auto;
+        }
+        .image-wrapper {
+            display: flex;
+            flex: 2;
+            justify-content: center; /* Center image horizontally */
+            align-items: center; /* Center image vertically */
+            overflow: visible; /* Prevent overflow */
+            border-radius: 10px; /* Rounded corners for the container */
+            max-width: 100%; /* Allow the container to take the full width */
+            max-height: 90vh; /* Limit container height */
+            height: auto; /* Adapt to content height */
+            margin: auto;
+        }
+
+        .image-wrapper img {
+            max-width: 100%; /* Ensure the image fits the container */
+            max-height: 90vh; /* Ensure the image doesn't exceed the viewport height */
+            height: auto; /* Maintain aspect ratio */
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(240, 240, 240, 0.8); /**/
+        }
+
+        .label-info {
+            flex: 1; /* Text takes less space */
+            font-size: 24px; /* Larger text for better readability */
+            line-height: 1.5; /* Improve text spacing */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+            text-align: center;
+        }
+        .label-info h2 {
+            margin: 0;
+            color: #ffffff;
+        }
+        .label-info span {
+            color: #acacac;
+            font-size: 18px;
+        }
+
+        .older-images {
+            background-color: #3b3b3b;
+            align-items: center;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px 0px;
+            box-sizing: border-box;
+        }
+
+        .image-card {
+            max-width: 80%;
+            max-height: 80vh;
+            margin: 15px auto;
+            text-align: center;
+            border: 1px solid #2d2d2d;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgb(32, 32, 32);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-card .image-container .image-wrapper img{
+            max-height: 60vh;
+        }
+        
+        @media (max-width: 768px) {
+            .image-container {
+                height: auto;
+                max-height: 100vh;
+                flex-direction: column;
+            }
+            .image-wrapper img {
+                max-width: 100%; /* Ensure the image fits the container */
+                max-height: 66vh; /* Ensure the image doesn't exceed the viewport height */
+                height: auto; /* Maintain aspect ratio */
+                display: block;
+                border-radius: 10px;
+            }
+            .label-info{
+                justify-content: top;
+            }
+            .image-card {
+                max-width: 90%;
+                width: 90%;
+                margin: 15px auto;
+                box-sizing: border-box;
+            }
+            .image-card .image-container .image-wrapper {
+                max-height: 85vh;
+            }
+            .image-card .image-container .image-wrapper img{
+                max-height: 45vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="image-container" id="main-image" style="height: 100vh;">
+        {% if latest_data %}
+            <div class="image-wrapper">
+                <img src="{{ latest_data.image.url }}" alt="Latest Image" id="latest-image">
+            </div>
+            <div class="label-info">
+                <h1>{{ latest_data.label_name }}</h1>
+                <span>Label: {{ latest_data.label }}</span>
+            </div>
+        {% else %}
+            <p>No image available yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="older-images">
+        <h2>Older Images</h2>
+    </div>
+
+    <div id="older-images" class="older-images">
+        <!-- Older images will be loaded dynamically here -->
+    </div>
+
+    <div id="loading" class="loading" style="background: #1e1e1e; padding: 7px 5px 3px 5px">
+        <p>Loading...</p>
+    </div>
+
+
+
+
+    <script>
+        let currentImageUrl = '{{ latest_data.image.url }}';  // Store the URL of the current image
+        let currentImageLabelName = '{{ latest_data.label_name }}';  // Store the Lable Name of the current image
+        let currentImageLabel = '{{ latest_data.label }}';  // Store the Label of the current image
+        let page = 1;
+        let loading = false;
+
+        // Poll the server to get the latest image every 5 seconds
+        function fetchLatestImage() {
+            fetch('/latest-image-data/')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.image_url) {
+                        console.log('No latest image available');
+                        return;
+                    }
+
+                    // Check if the latest image is different from the current image
+                    if (currentImageUrl !== data.image_url) {
+                        // Move the current latest image to the older images section
+                        const container = document.getElementById('older-images');
+                        const oldImageCard = document.createElement('div');
+                        oldImageCard.classList.add('image-card');
+                        oldImageCard.innerHTML = `
+                            <div class="image-container" style="background-color: #00000000;">
+                                <div class="image-wrapper">
+                                    <img src="${currentImageUrl}">
+                                </div>
+                                <div class="label-info">
+                                    <h3>${currentImageLabelName}</h3>
+                                    <span style="color: #acacac">Label: ${currentImageLabel}</span>
+                                </div>
+                            </div>
+                        `;
+                        container.prepend(oldImageCard);  // Add to the top of the older images list
+
+                        // Update the latest image section with the new image
+                        const mainImageContainer = document.getElementById('main-image');
+                        mainImageContainer.innerHTML = `
+                            <div class="image-wrapper">
+                                <img src="${data.image_url}" alt="Latest Image" id="latest-image">
+                            </div>
+                                <div class="label-info">
+                                    <h1>${data.label_name}</h1>
+                                    <span style="color: #acacac">Label: ${data.label}</span>
+                                </div>
+                            </div>
+                        `;
+                        
+                        page++;
+                        // Update the current image URL
+                        currentImageUrl = data.image_url;
+                        currentImageLabelName = data.label_name
+                        currentImageLabel = data.label
+
+                    }
+                })
+                .catch(err => console.error('Error fetching the latest image:', err));
+        }
+
+
+        // Function to load older images via AJAX
+        function loadOlderImages() {
+            if (loading) return;
+            loading = true;
+            document.getElementById('loading').style.display = 'block'; // Show loading message
+
+            fetch(`/load-older-images/?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('older-images');
+
+                    if (data.images.length > 0) {
+                        data.images.forEach(image => {
+                            const imageCard = document.createElement('div');
+                            imageCard.classList.add('image-card');
+                            imageCard.innerHTML = `
+                                <div class="image-container" style="background-color: #00000000;">
+                                    <div class="image-wrapper">
+                                        <img src="${image.image_url}">
+                                    </div>
+                                    <div class="label-info">
+                                        <h3>${image.label_name}</h3>
+                                        <span style="color: #acacac">Label: ${image.label}</span>
+                                    </div>
+                                </div>
+                            `;
+                            // Append the older images at the bottom (below existing ones)
+                            container.appendChild(imageCard);
+                        });
+
+                        // Update page number for next load
+                        page++;
+
+                        // Hide loading message
+                        document.getElementById('loading').style.display = 'none';
+                    } else {
+                        document.getElementById('loading').innerHTML = "<p>No more images available.</p>";
+                    }
+
+                    loading = false;
+                })
+                .catch(err => {
+                    console.error('Error loading images:', err);
+                    loading = false;
+                });
+        }
+        
+        // Infinite scrolling
+        window.addEventListener('scroll', function() {
+            const threshold = 50; // Distance from the bottom where we consider it to be "reached"
+            
+            // Calculate how far from the bottom we are
+            const distanceFromBottom = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+
+            // Trigger the loading of older images when we're within a certain threshold from the bottom
+            if (distanceFromBottom <= threshold) {
+                loadOlderImages();
+            }
+        });
+
+        // Initially load a few older images
+        loadOlderImages();
+
+        // Fetch the latest image every 5 seconds
+        setInterval(fetchLatestImage, 1000);
+
+        document.addEventListener("fullscreenchange", () => {
+            if (document.fullscreenElement) {
+                body.classList.add("hide-cursor"); // Hide cursor in fullscreen
+            } else {
+                body.classList.remove("hide-cursor"); // Show cursor when exiting fullscreen
+            }
+        });
+
+        // Function to enter fullscreen
+        function enterFullscreen() {
+            const elem = document.documentElement; // The entire page
+
+            // Check if the browser supports fullscreen API
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+                body.classList.add("hide-cursor");
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+                body.classList.add("hide-cursor");
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                elem.webkitRequestFullscreen();
+                body.classList.add("hide-cursor");
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen();
+                body.classList.add("hide-cursor");
+            }
+            
+        }
+
+        // Check if on mobile and listen for user action
+        window.onload = function() {
+            // Add an event listener to the image container to trigger fullscreen when tapped
+            const container = document.getElementById('main-image');
+            container.addEventListener('click', function() {
+                enterFullscreen();  // Enter fullscreen when user taps on the image
+            });
+        };
+
+        let timeout;
+
+        // Time in milliseconds to wait before hiding the cursor
+        const inactivityTime = 2000;
+
+        const hideCursor = () => {
+            document.body.classList.add('hide-cursor');
+        };
+
+        const showCursor = () => {
+            document.body.classList.remove('hide-cursor');
+        };
+
+        const resetTimer = () => {
+            showCursor();
+            clearTimeout(timeout);
+            timeout = setTimeout(hideCursor, inactivityTime);
+        };
+
+        // Monitor mouse and keyboard events
+        document.addEventListener('mousemove', resetTimer);
+        document.addEventListener('keydown', resetTimer);
+
+        // Start the timer
+        resetTimer();
+    </script>
+    </script>
+
+</body>
+</html>

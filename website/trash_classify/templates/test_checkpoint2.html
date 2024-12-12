@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #000000;
+            color: rgb(238, 238, 238);
+        }
+        .image-container {
+            width: 80%;
+            max-height: 100vh; /* Fullscreen height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px; /* Added padding for better spacing */
+            box-sizing: border-box; /* Include padding in width/height calculations */
+            margin: auto;
+        }
+        .image-wrapper {
+            display: flex;
+            flex: 2;
+            justify-content: center; /* Center image horizontally */
+            align-items: center; /* Center image vertically */
+            overflow: visible; /* Prevent overflow */
+            border-radius: 10px; /* Rounded corners for the container */
+            max-width: 100%; /* Allow the container to take the full width */
+            max-height: 90vh; /* Limit container height */
+            width: 100%; /* Ensure the container stretches across the width */
+            height: auto; /* Adapt to content height */
+            margin: auto;
+        }
+
+        .image-wrapper img {
+            max-width: 100%; /* Ensure the image fits the container */
+            max-height: 90vh; /* Ensure the image doesn't exceed the viewport height */
+            height: auto; /* Maintain aspect ratio */
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(240, 240, 240, 0.8); /**/
+        }
+
+        .label-info {
+            flex: 1; /* Text takes less space */
+            margin-left: 20px;
+            font-size: 24px; /* Larger text for better readability */
+            line-height: 1.5; /* Improve text spacing */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+            text-align: left;
+        }
+        .label-info h2 {
+            margin: 0;
+            color: #ffffff;
+        }
+        .label-info span {
+            color: #acacac;
+            font-size: 18px;
+        }
+
+        .older-images {
+            padding: 20px;
+            background-color: #3b3b3b;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .image-card {
+            width: 90%;
+            margin: 15px 0;
+            text-align: center;
+            border: 1px solid #2d2d2d;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgb(32, 32, 32);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .image-container {
+                width: 99%;
+                max-height: 100vh;
+                flex-direction: column;
+            }
+            .image-wrapper img {
+                max-width: 100%; /* Ensure the image fits the container */
+                max-height: 66vh; /* Ensure the image doesn't exceed the viewport height */
+                height: auto; /* Maintain aspect ratio */
+                display: block;
+                border-radius: 10px;
+            }
+            .label-info{
+                justify-content: top;
+            }
+            .image-card {
+                width: 98%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="image-container" id="main-image" style="height: 100vh;">
+        <div class="image-wrapper">
+            <img src="/pics/Screenshot_2024-12-08_at_3.02.46PM.png" alt="Latest Image" id="latest-image">
+        </div>
+        <div class="label-info">
+            <h1>AAA</h1>
+            <span>Label: 3</span>
+        </div>
+    </div>
+
+    <div class="older-images">
+        <h2>Older Images</h2>
+    </div>
+    <div id="older-images" class="older-images">
+        <!-- Older images will be loaded dynamically here -->
+        <div class="image-card">
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img src="/pics/Screenshot_2024-12-08_at_3.02.46PM.png" alt="Latest Image" id="latest-image">
+                </div>
+                <div class="label-info">
+                    <h3>${currentImageLabelName}</h3>
+                    <span style="color: #acacac">Label: ${currentImageLabel}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Function to enter fullscreen
+        function enterFullscreen() {
+            const elem = document.documentElement; // The entire page
+
+            // Check if the browser supports fullscreen API
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Check if on mobile and listen for user action
+        window.onload = function() {
+            // Add an event listener to the image container to trigger fullscreen when tapped
+            const container = document.getElementById('main-image');
+            container.addEventListener('click', function() {
+                enterFullscreen();  // Enter fullscreen when user taps on the image
+            });
+        };
+    </script>
+
+</body>
+</html>

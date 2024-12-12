@@ -1,0 +1,180 @@
+{% load static %}
+{% load pwa %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Classification</title>
+    {% progressive_web_app_meta %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1 / 1; /* Force square */
+            overflow: hidden;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            margin: 0 auto;
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1 / 1; /* Force square */
+            overflow: hidden;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            margin: 0 auto;
+        }
+
+        #camera {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the video fills the square */
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: #ff4c4c;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        #result img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Make sure the image covers the square container */
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-wrapper">
+            <video id="camera" autoplay></video>
+        </div>
+        <div class="button-container">
+            <button id="switchCamera">Switch Camera</button>
+            <button id="takeShot">Take Shot</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const camera = document.getElementById('camera');
+        const takeShot = document.getElementById('takeShot');
+        const switchCamera = document.getElementById('switchCamera');
+        const result = document.getElementById('result');
+
+        let currentStream = null;
+        let isBackCamera = true; // Default to back camera
+
+        // Start the camera with a specific facing mode
+        async function startCamera(facingMode = 'environment') {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: facingMode }
+                });
+                currentStream = stream;
+                camera.srcObject = stream;
+            } catch (error) {
+                alert('Unable to access the camera. Please check your settings.');
+                console.error(error);
+            }
+        }
+
+        // Toggle between front and back cameras
+        switchCamera.addEventListener('click', () => {
+            isBackCamera = !isBackCamera;
+            const facingMode = isBackCamera ? 'environment' : 'user';
+            startCamera(facingMode);
+        });
+
+        // Take a shot
+        takeShot.addEventListener('click', () => {
+            const squareSize = Math.min(camera.videoWidth, camera.videoHeight); // Ensure the square fits within the video dimensions
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            // Set canvas to a square size
+            canvas.width = squareSize;
+            canvas.height = squareSize;
+
+            // Calculate cropping coordinates
+            const xOffset = (camera.videoWidth - squareSize) / 2;
+            const yOffset = (camera.videoHeight - squareSize) / 2;
+
+            // Draw the cropped square onto the canvas
+            context.drawImage(camera, xOffset, yOffset, squareSize, squareSize, 0, 0, squareSize, squareSize);
+
+            // Get the image data URL
+            const imageData = canvas.toDataURL('image/png');
+
+            // Display the captured square image
+            result.innerHTML = `<div class="image-wrapper"><img id="captured-image" src="${imageData}" alt="Captured Image"></div>`;
+        });
+        
+        // Optional: Send the image to a server for processing
+        // fetch('/predict', {
+        //     method: 'POST',
+        //     body: JSON.stringify({ image: imageData }),
+        //     headers: { 'Content-Type': 'application/json' }
+        // }).then(response => response.json())
+        //   .then(data => console.log(data));
+
+        // Initialize with back camera by default
+        startCamera('environment');
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% load static %}
+{% load pwa %}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <!-- <link rel="stylesheet" href="/static/admin/css/base.css"> -->
+
+    <link rel="stylesheet" href="{% static 'css/dark_mode.css' %}">
+    <script src="{% static 'js/theme.js' %}"></script>
+    {% progressive_web_app_meta %}
+</head>
+<body>
+    This is the About page
+</body>
+</html>
