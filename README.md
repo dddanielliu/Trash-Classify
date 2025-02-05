@@ -52,7 +52,7 @@ Go to http://localhost:8000 (or your custom port) and view the website.
 - Display: /display
   * A pretty view of latest uploaded images and their predicted labels
   * Scroll down to view older images
-  * In order to view display page, login is required and with staff status.\
+  * In order to view display page, login is required and with staff status.
 
 - Admin Page: /admin
   * The admin page where you can see all uploaded details in the "His datas" section. 
