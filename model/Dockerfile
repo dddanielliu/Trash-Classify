@@ -4,7 +4,7 @@ FROM ubuntu:latest
 WORKDIR /app
 
 ENV DEBIAN_FRONTEND=noninteractive
-# ENV TZ=Asia/Taipei
+ENV TZ=UTC
 
 RUN apt-get -y update
 
