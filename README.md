@@ -1,4 +1,4 @@
-# Trash-Classify
+# Trash Classify
 
 ## Project Description
 Upload a picture of a trash and it will help you determine what type of trash it is.
@@ -17,7 +17,7 @@ We have classified 8 different types of trash:
 ### 1. Download the required files
 
 ```bash
-git clone
+git clone https://github.com/dddanielliu/Trash-Classify.git
 ```
 
 ### 2. Install Docker
@@ -35,11 +35,16 @@ curl -fsSL https://get.docker.com | sudo sh
 </details>
 
 ### 3. Start containers
+Go to repo's directory:
+```
+cd Trash-Classify
+```
+Run the following command to start the containers:
 ```bash
 docker compose up -d
 ```
 > [!TIP]
-> To change the port you want to use: \
+> To use a custom port for the app: \
 > edit compose.yaml at line 23:
 > ```yaml
 > 22:     ports:
@@ -73,3 +78,8 @@ We have created superuser and staff demo accounts both with staff status turned 
 | -------- | -------- |
 | admin    | admin    |
 | staff    | staff    |
+
+
+#### For Developers
+You can train your own model by referencing the [train.ipynb](https://github.com/dddanielliu/Trash-Classify/blob/main/training/train.ipynb) file.
+After training, place your trained model in model/ directory then change the first line of model/ClassifyInterface.py.
