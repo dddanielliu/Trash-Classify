@@ -1,7 +1,7 @@
 /* 全局設置 */
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #e0f7fa, #ffffff); /* 漸層背景 */
+    background: #e0f7fa; /* 漸層背景 */
     background-attachment: fixed; /* 固定背景 */
     margin: 0;
     padding: 0;
@@ -14,17 +14,25 @@ body {
 html, body {
     overscroll-behavior: none; /* Prevents scroll chaining */
     touch-action: none;       /* Disables touch-based scrolling */
+    align-items: center;
+    height: 100vh;
+    touch-action: none;
 }
 
+
 /* 容器樣式 */
-.container {
+.content-wrap .container {
     text-align: center;
     background: #ffffff;
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.06);
-    width: 90%;
-    max-width: 400px;
+    /* width: 100%; */
+    max-width: 100%;
+}
+
+.content-wrap, .container {
+    touch-action: none;
 }
 
 /* 標題樣式 */
@@ -37,12 +45,12 @@ h1 {
 
 /* 表單樣式 */
 form {
-    margin: 20px 0;
+    margin: 20px 0px 15px 0px;
 }
 
 input[type="file"] {
     display: block;
-    margin: 0 auto 20px auto;
+    margin: 0px auto;
     padding: 10px;
     font-size: 1rem;
     border: 2px dashed #ccc;
@@ -58,6 +66,7 @@ input[type="file"]:hover {
 }
 
 button {
+    margin-top: 20px;
     padding: 10px 20px;
     font-size: 1rem;
     color: #fff;

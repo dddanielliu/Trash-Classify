@@ -35,7 +35,7 @@ urlpatterns = [
 # ]
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-from django.http import HttpResponseForbidden
-from django.conf.urls import handler404
+# from django.http import HttpResponseForbidden
+# from django.conf.urls import handler404
 
-handler404 = lambda request, exception: HttpResponseForbidden("Access forbidden: The URL you requested is not allowed.")
+# handler404 = lambda request, exception: HttpResponseForbidden("Access forbidden: The URL you requested is not allowed.")

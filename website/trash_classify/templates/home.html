@@ -2,19 +2,17 @@
 {% load pwa %}
 
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="auto">
 <head>
     <meta charset="UTF-8">
     <title>Trash Classify</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home/dark_mode.css' %}">
     <script src="{% static 'js/theme.js' %}"></script>
     {% progressive_web_app_meta %}
 </head>
 <body>
-    <!-- <div class="topnav">
-        <a class="Trash Classify" href="#">Trash Classify</a>
-    </div> -->
     <div class="content-wrap">
         <div class="container">
             <h1 style="text-align: center;">Trash Classify</h1>
@@ -22,9 +20,8 @@
             
             <form method="POST" enctype="multipart/form-data" id="uploadForm">
                 {% csrf_token %}
-                <!-- {{ form.as_p }} -->
                 <input type="file" name="image" accept="image/*" required id="fileInput">
-                <button type="submit">Upload</button>
+                <button type="submit" id="uploadButton">Upload</button>
             </form>
             
             {% if result %}
@@ -34,5 +31,12 @@
             {% endif %}
         </div>
     </div>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            const uploadButton = document.getElementById('uploadButton');
+            uploadButton.disabled = true;
+            uploadButton.textContent = 'Uploading...';
+        });
+    </script>
 </body>
 </html>

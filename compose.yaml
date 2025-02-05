@@ -1,0 +1,32 @@
+services:
+  model:
+    container_name: trash-classify-model
+    build: 
+      context: model
+    volumes:
+      - type: bind
+        source: ./model
+        target: /app
+    restart: "unless-stopped"
+    stdin_open: true
+    tty: true
+    command:
+      ["uvicorn","main:app","--host","0.0.0.0","--port","8188","--reload"]
+      # ["/bin/bash"]
+  django:
+    container_name: trash-classify-django
+    depends_on: 
+      - model
+    build: 
+      context: website
+    ports:
+      - '8000:8000'
+    volumes:
+      - type: bind
+        source: ./website
+        target: /app
+    restart: "unless-stopped"
+    stdin_open: true
+    tty: true
+    command:
+      ["/bin/sh", "-c", "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"]

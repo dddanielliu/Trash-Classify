@@ -180,7 +180,7 @@
                     }
 
                     // Check if the latest image is different from the current image
-                    if (currentImageUrl !== data.image_url) {
+                    if (currentImageUrl !== data.image_url && data.label != null) {
                         // Move the current latest image to the older images section
                         const container = document.getElementById('older-images');
                         const oldImageCard = document.createElement('div');
@@ -197,7 +197,7 @@
                             </div>
                         `;
                         container.prepend(oldImageCard);  // Add to the top of the older images list
-
+                            
                         // Update the latest image section with the new image
                         const mainImageContainer = document.getElementById('main-image');
                         mainImageContainer.innerHTML = `

@@ -16,14 +16,14 @@ class ClassifyInterface:
         print(self.__model_path)
         self.model = tf.keras.models.load_model(self.__model_path)
         self.reverse_label_dict = {
-            '一般 general': 0, 
-            '塑膠 plastic': 1, 
-            '廚餘 food_waste': 2, 
-            '廢紙 waste_paper': 3, 
-            '玻璃 glass': 4, 
-            '衣服類 clothes (Textiles)': 5, 
-            '鐵鋁金屬 iron alumium': 6, 
-            '電池類 battery': 7
+            'General': 0, # 一般
+            'Plastic': 1, # 塑膠
+            'Food_Waste': 2, # 廚餘 
+            'Waste_paper': 3, # 廢紙
+            'Glass': 4, # 玻璃
+            'Clothes (Textiles)': 5, # 衣服類
+            'Iron alumium': 6, # 鐵鋁金屬
+            'Battery': 7 # 電池類
         }
         self.label_dict = {value: key for key, value in self.reverse_label_dict.items()}
         print("[Initalized]")

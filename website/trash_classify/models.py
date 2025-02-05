@@ -25,7 +25,7 @@ class HisData(models.Model):
         if self.image and self.label is None:
             if os.path.isfile(self.image.path):
                 result_json={}
-                url = "http://localhost:8188/predict/"
+                url = "http://model:8188/predict/"
                 response = requests.get(url+"?img_path={}".format(os.path.abspath(self.image.path)))
 
                 if response.status_code == 200:
@@ -35,4 +35,4 @@ class HisData(models.Model):
                 super(HisData, self).save(*args, **kwargs)
 
 
-    add_date.editable = True
+    # add_date.editable = True

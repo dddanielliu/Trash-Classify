@@ -12,6 +12,9 @@ from django.utils import timezone
 from .models import HisData
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.defaults import page_not_found
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 import requests
@@ -37,7 +40,7 @@ def home(request):
                 # print(f"Storing result in session: {trimmed_result}")  # Debugging line
 
                 result_json={}
-                url = "http://localhost:8188/predict/"
+                url = "http://model:8188/predict/"
                 response = requests.get(url+"?img_path={}".format(os.path.abspath(image_path)))
 
                 if response.status_code == 200:
@@ -61,16 +64,21 @@ def home(request):
     return render(request, 'home.html', {'form': form, 'result': result})
 
 def about(request):
-    return render(request, 'about.html')
-
-def camera(request):
-    return render(request, 'camera.html')
+    try:
+        return FileResponse(open(os.path.join(settings.BASE_DIR, 'static', 'Trash Classify.pdf'), 'rb'), content_type='application/pdf')
+    except FileNotFoundError:
+        return page_not_found(request, exception=None)
+    # return render(request, 'about.html')
 
 def serve_picture(request, filename):
+    # print('!!!!1')
+    # raise PermissionDenied
+    # return permission_denied(request)
     # Check if the user is in the STAFF_MEMBERS group
-    if not request.user.groups.filter(name="STAFF_MEMBERS").exists():
+    if not request.user.is_staff:
         # return HttpResponseNotFound("<!DOCTYPE html><html lang=\"en\"><head><title>Not Found</title></head><body><h1>Not Found</h1><p>The requested resource was not found on this server.</p></body></html>")
-        return HttpResponseForbidden("Access forbidden: The URL you requested is not allowed.")
+        # return HttpResponseForbidden("Access forbidden: The URL you requested is not allowed.")
+        return page_not_found(request, exception=None)
 
     # Define the path to your 'pics/' directory
     pics_path = os.path.join(settings.BASE_DIR, 'pics')
@@ -125,7 +133,7 @@ def serve_picture(request, filename):
 
 @login_required
 def display(request):
-    if not request.user.groups.filter(name="STAFF_MEMBERS").exists():
+    if not request.user.is_staff:
         return HttpResponseForbidden("Access forbidden: The URL you requested is not allowed.")
     latest_data = HisData.objects.order_by('-add_date').first()
     context = {
@@ -133,8 +141,9 @@ def display(request):
     }
     return render(request, 'display.html', context)
 
+@login_required
 def latest_image_data(request):
-    if not request.user.groups.filter(name="STAFF_MEMBERS").exists():
+    if not request.user.is_staff:
         return JsonResponse({'ERROR': 'Access Forbidden'})
     # Get the latest image and its label data
     latest_data = HisData.objects.order_by('-add_date').first()
@@ -149,8 +158,9 @@ def latest_image_data(request):
 
     return JsonResponse(response_data)
 
+@login_required
 def load_older_images(request):
-    if not request.user.groups.filter(name="STAFF_MEMBERS").exists():
+    if not request.user.is_staff:
         return JsonResponse({'ERROR': 'Access Forbidden'})
     
     page = int(request.GET.get('page', 1))
@@ -191,7 +201,7 @@ def test(request):
                 # print(f"Storing result in session: {trimmed_result}")  # Debugging line
 
                 result_json={}
-                url = "http://localhost:8188/predict/"
+                url = "http://model:8188/predict/"
                 response = requests.get(url+"?img_path={}".format(os.path.abspath(image_path)))
 
                 if response.status_code == 200:

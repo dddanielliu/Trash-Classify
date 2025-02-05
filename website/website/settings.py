@@ -27,10 +27,10 @@ SECRET_KEY = 'django-insecure-85f1emy#(9rd^fpl9hd2w+^t-ein(@^apw(+9=k63pe#6z2r%)
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'trashdemo.dddanielliu.com', '127.0.0.1', 'localhost'
+    '127.0.0.1', 'localhost','*'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://trashdemo.dddanielliu.com', 'http://127.0.0.1', 'http://localhost']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
 
 
 # Application definition
@@ -113,8 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-# TIME_ZONE = 'UTC'
-TIME_ZONE = 'Asia/Taipei'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -143,7 +142,7 @@ STATICFILES_DIRS = [
 PWA_APP_NAME = 'Trash Classify'
 PWA_APP_SHORT_NAME = 'TrashClassify'
 PWA_APP_DESCRIPTION = "Trash Classification"
-PWA_APP_THEME_COLOR = '#7284ff'
+PWA_APP_THEME_COLOR = '#082031'
 PWA_APP_BACKGROUND_COLOR = '#ff3f5b'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
