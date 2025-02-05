@@ -3,7 +3,7 @@ FROM ubuntu:latest
 # Set the working directory inside the container
 WORKDIR /app
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 # ENV TZ=Asia/Taipei
 
 RUN apt-get -y update
