@@ -21,18 +21,7 @@ git clone https://github.com/dddanielliu/Trash-Classify.git
 ```
 
 ### 2. Install Docker
-Install docker by following the official documentation: https://docs.docker.com/engine/install/#supported-platforms.
-> [!WARNING]
-> You could use the convenience script below to install docker on Linux. However we recommend to not blindly download and execute scripts as sudo. But if you feel like it, you can of course use it. See below: 
-
-<details>
-    <summary>Using the convenience script</summary>
-
-```bash
-curl -fsSL https://get.docker.com | sudo sh
-```
-
-</details>
+Install docker by following the official documentation: [https://docs.docker.com/engine/install/#supported-platforms](https://docs.docker.com/get-started/get-docker/).
 
 ### 3. Start containers
 Go to repo's directory:
