@@ -71,4 +71,4 @@ We have created superuser and staff demo accounts both with staff status turned 
 
 #### For Developers
 You can train your own model by referencing the [train.ipynb](https://github.com/dddanielliu/Trash-Classify/blob/main/model/training/train.ipynb) file.
-After training, place your trained model in model/ directory then change the first line of [model/ClassifyInterface.py](https://github.com/dddanielliu/Trash-Classify/blob/main/model%2FClassifyInterface.py#L1-L1).
+After training, place your trained model in model/ directory then change the first line of [model/ClassifyInterface.py](https://github.com/dddanielliu/Trash-Classify/blob/main/model/ClassifyInterface.py#L1).
