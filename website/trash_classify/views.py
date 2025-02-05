@@ -81,7 +81,8 @@ def serve_picture(request, filename):
         return page_not_found(request, exception=None)
 
     # Define the path to your 'pics/' directory
-    pics_path = os.path.join(settings.BASE_DIR, 'pics')
+    # pics_path = os.path.join(settings.BASE_DIR, 'images')
+    pics_path = os.path.join(settings.UPLOAD_ROOT, 'images')
 
     # Build the full file path
     file_path = os.path.join(pics_path, filename)

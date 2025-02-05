@@ -2,9 +2,9 @@ from django.db import models
 import os
 import requests
 from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 
-UPLOAD_ROOT = '/upload'
-upload_storage = FileSystemStorage(location=UPLOAD_ROOT)
+upload_storage = FileSystemStorage(location=settings.UPLOAD_ROOT)
 # Create your models here.
 class HisData(models.Model):
     # image = models.ImageField(upload_to='images/', blank=True, null=True)

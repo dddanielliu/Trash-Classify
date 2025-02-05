@@ -138,6 +138,7 @@ STATICFILES_DIRS = [
     BASE_DIR/ 'static',
 ]
 
+UPLOAD_ROOT = '/upload'
 
 PWA_APP_NAME = 'Trash Classify'
 PWA_APP_SHORT_NAME = 'TrashClassify'

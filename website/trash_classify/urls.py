@@ -7,7 +7,7 @@ urlpatterns = [
     # path('upload/', views.upload_image, name='upload_image'),
     # path('success/', views.upload_success, name='success'),
     path('about/', views.about),
-    path('pics/<str:filename>/', views.serve_picture, name='serve_picture'),
+    path('images/<str:filename>/', views.serve_picture, name='serve_picture'),
 
     path('display/', views.display, name='display'),
     path('latest-image-data/', views.latest_image_data, name='latest_image_data'),  # For polling the latest image
