@@ -18,8 +18,8 @@ class ClassifyInterface:
         self.reverse_label_dict = {
             'General': 0, # 一般
             'Plastic': 1, # 塑膠
-            'Food_Waste': 2, # 廚餘 
-            'Waste_paper': 3, # 廢紙
+            'Food Waste': 2, # 廚餘 
+            'Waste Paper': 3, # 廢紙
             'Glass': 4, # 玻璃
             'Clothes (Textiles)': 5, # 衣服類
             'Iron alumium': 6, # 鐵鋁金屬
