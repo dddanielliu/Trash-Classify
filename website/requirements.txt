@@ -1,4 +1,4 @@
-requests
-django
-django-pwa
-pillow
+requests==2.32.3
+Django==5.1.5
+django-pwa==2.0.1
+pillow==11.1.0

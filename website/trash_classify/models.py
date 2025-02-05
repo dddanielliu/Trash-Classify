@@ -1,10 +1,14 @@
 from django.db import models
 import os
 import requests
+from django.core.files.storage import FileSystemStorage
 
+UPLOAD_ROOT = '/upload'
+upload_storage = FileSystemStorage(location=UPLOAD_ROOT)
 # Create your models here.
 class HisData(models.Model):
-    image = models.ImageField(upload_to='pics/', blank=True, null=True)
+    # image = models.ImageField(upload_to='images/', blank=True, null=True)
+    image = models.ImageField(upload_to='images', storage=upload_storage) 
     label = models.IntegerField(null=True, blank=True)
     label_name = models.CharField(max_length=255, null=True, blank=True)
     add_date = models.DateTimeField(auto_now_add=True)

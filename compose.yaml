@@ -7,14 +7,16 @@ services:
       - type: bind
         source: ./model
         target: /app
+      - type: bind
+        source: ./images
+        target: /upload/images
     restart: "unless-stopped"
     stdin_open: true
     tty: true
     command:
       ["uvicorn","main:app","--host","0.0.0.0","--port","8188","--reload"]
-      # ["/bin/bash"]
-  django:
-    container_name: trash-classify-django
+  website:
+    container_name: trash-classify-website
     depends_on: 
       - model
     build: 
@@ -25,6 +27,9 @@ services:
       - type: bind
         source: ./website
         target: /app
+      - type: bind
+        source: ./images
+        target: /upload/images
     restart: "unless-stopped"
     stdin_open: true
     tty: true
