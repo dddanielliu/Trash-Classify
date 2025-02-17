@@ -28,6 +28,10 @@ Go to repo's directory:
 ```
 cd Trash-Classify
 ```
+Create a directory to store uploaded images:
+```
+mkdir -p images
+```
 Run the following command to start the containers:
 ```bash
 docker compose up -d
