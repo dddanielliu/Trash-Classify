@@ -4,7 +4,7 @@ FROM python:3.13-slim
 WORKDIR /app
 
 ARG DEBIAN_FRONTEND=noninteractive
-# ENV TZ=UTC
+# ENV TZ=Etc/UTC
 
 RUN apt-get -y update
 
